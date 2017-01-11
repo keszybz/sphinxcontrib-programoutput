@@ -44,6 +44,7 @@ from collections import defaultdict, namedtuple
 
 from docutils import nodes
 from docutils.parsers import rst
+from docutils.parsers.rst import directives
 from docutils.parsers.rst.directives import flag, unchanged, nonnegative_int
 
 
@@ -252,12 +253,13 @@ def init_cache(app):
     if not hasattr(app.env, 'programoutput_cache'):
         app.env.programoutput_cache = ProgramOutputCache()
 
-
 def setup(app):
     app.add_config_value('programoutput_use_ansi', False, 'env')
     app.add_config_value('programoutput_prompt_template',
                          '$ {command}\n{output}', 'env')
-    app.add_directive('program-output', ProgramOutputDirective)
-    app.add_directive('command-output', ProgramOutputDirective)
+    if 'program-output' not in directives._directives:
+        # avoid double registration which causes a problem with sphinx 1.6
+        app.add_directive('program-output', ProgramOutputDirective)
+        app.add_directive('command-output', ProgramOutputDirective)
     app.connect(str('builder-inited'), init_cache)
     app.connect(str('doctree-read'), run_programs)
