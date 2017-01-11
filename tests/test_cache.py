@@ -32,8 +32,8 @@ import pytest
 
 from sphinxcontrib.programoutput import ProgramOutputCache, Command
 
-
-def pytest_funcarg__cache(request):
+@pytest.fixture
+def cache(request):
     return ProgramOutputCache()
 
 

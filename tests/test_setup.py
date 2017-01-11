@@ -26,11 +26,12 @@
 from __future__ import (print_function, division, unicode_literals,
                         absolute_import)
 
+import pytest
 
 from sphinxcontrib.programoutput import ProgramOutputCache
 
-
-def pytest_funcarg__content(request): # pylint: disable=W0613
+@pytest.fixture
+def content(request): # pylint: disable=W0613
     return 'dummy content'
 
 

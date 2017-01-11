@@ -49,8 +49,8 @@ pygments_style = 'sphinx'
 html_theme = 'basic'
 """
 
-
-def pytest_funcarg__content(request):
+@pytest.fixture
+def content(request):
     """
     Return the content for the current test, extracted from ``with_content``
     marker.
@@ -65,7 +65,8 @@ Content
     return content
 
 
-def pytest_funcarg__srcdir(request):
+@pytest.fixture
+def srcdir(request):
     """
     Generated source directory for test Sphinx application.
     """
@@ -86,23 +87,24 @@ def pytest_funcarg__srcdir(request):
     return srcdir
 
 
-def pytest_funcarg__outdir(request):
+@pytest.fixture
+def outdir(request):
     """
     Output directory for current test.
     """
     tmpdir = request.getfuncargvalue('tmpdir')
     return tmpdir.join('html')
 
-
-def pytest_funcarg__doctreedir(request):
+@pytest.fixture
+def doctreedir(request):
     """
     The doctree directory for the current.
     """
     tmpdir = request.getfuncargvalue('tmpdir')
     return tmpdir.join('doctrees')
 
-
-def pytest_funcarg__confoverrides(request):
+@pytest.fixture
+def confoverrides(request):
     """
     Confoverrides for the current test as dict, extracted from the keyword
     arguments to the ``confoverrides`` marker.
@@ -113,8 +115,8 @@ def pytest_funcarg__confoverrides(request):
     else:
         return {}
 
-
-def pytest_funcarg__app(request):
+@pytest.fixture
+def app(request):
     """
     Sphinx application for the current test.
     """
@@ -131,13 +133,15 @@ def pytest_funcarg__app(request):
     return app
 
 
-def pytest_funcarg__doctree(request):
+@pytest.fixture
+def doctree(request):
     request.applymarker(pytest.mark.build_app)
     app = request.getfuncargvalue('app')
     return app.env.get_doctree('content/doc')
 
 
-def pytest_funcarg__cache(request):
+@pytest.fixture
+def cache(request):
     request.applymarker(pytest.mark.build_app)
     app = request.getfuncargvalue('app')
     return app.env.programoutput_cache
